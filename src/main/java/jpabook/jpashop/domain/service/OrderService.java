@@ -9,8 +9,11 @@ import jpabook.jpashop.domain.repository.ItemRepository;
 import jpabook.jpashop.domain.repository.MemberRepository;
 import jpabook.jpashop.domain.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -48,7 +51,23 @@ public class OrderService {
         return order.getId();
     }
 
-    //취소
+    /**
+     * 주문 취소
+     */
+    @Transactional
+    public void cancelOrder(Long orderId) {
+        //주문 엔티티 조회
+        Order order = orderRepository.findOne(orderId);
+        //주문 취소
+        order.cancel(); // JPA의 강점. 더티 체킹(변경내역 감지) 가 일어나서 변경점을 업데이트 해준다.
+                        // service단에서 따로 처리해줄 필요가 없다.
 
-    //검색
+        //엔티티에 핵심 로직을 넣는 패턴 - 도메인 모델 패턴
+        //반대로 서비스 계층에 대부분의 비즈니스 로직 처리 - 트랜잭션 스크립트 패턴
+    }
+
+      //검색
+/*    public List<Order> findOrders(OrderSearch orderSearch) {
+        return orderRepository.findAll(orderSearch);
+    }*/
 }
