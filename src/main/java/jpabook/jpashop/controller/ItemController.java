@@ -61,16 +61,20 @@ public class ItemController {
     }
 
     @PostMapping ("items/{itemId}/edit")
-    public String updateItemForm(@PathVariable String itemId,@ModelAttribute("form") BookForm form) {
-        Book book = new Book();
-        book.setId(form.getId());
-        book.setName(form.getName());
-        book.setPrice(form.getPrice());
-        book.setStockQuantity(form.getStockQuantity());
-        book.setIsbn(form.getIsbn());
-        book.setAuthor(form.getAuthor());
+    public String updateItem(@PathVariable Long itemId,@ModelAttribute("form") BookForm form) {
+//        Book book = new Book();
+//        book.setId(form.getId());
+//        book.setName(form.getName());
+//        book.setPrice(form.getPrice());
+//        book.setStockQuantity(form.getStockQuantity());
+//        book.setIsbn(form.getIsbn());
+//        book.setAuthor(form.getAuthor());
 
-        itemService.saveItem(book);
+        //어설프게 entity를 파라미터로 쓰지 말자. 정확하게 필요한 데이터만 받자.
+        //데이터가 많으면 DTO를 사용
+
+        itemService.updateItem(itemId, form.getName(), form.getPrice(), form.getStockQuantity());
+
         return "redirect:items";
 
     }
